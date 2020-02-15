@@ -65,8 +65,8 @@ public class QuoteController {
     return quoteRepository.save(quote);
   }
 
-  @PutMapping(value = "{id}/text", consumes = MediaType.TEXT_PLAIN_VALUE,
-      produces = MediaType.TEXT_PLAIN_VALUE)
+  @PutMapping(value = "{id}/text",
+      consumes = MediaType.TEXT_PLAIN_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
   public String put(@PathVariable UUID id, @RequestBody String modifiedQuote) {
     Quote quote = get(id);
     quote.setText(modifiedQuote);
@@ -76,12 +76,11 @@ public class QuoteController {
 
   @DeleteMapping(value = "{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete (@PathVariable UUID id) {
-// Code below throws NoSuchElementException if id is not in database.
+  public void delete(@PathVariable UUID id) {
+    // Code below throws NoSuchElementException if id is not in database.
 //    Quote quote = get(id);
 //    quoteRepository.delete(quote);
-    quoteRepository.findById(id)
-        .ifPresent((quoteRepository::delete));
+    quoteRepository.findById(id).ifPresent(quoteRepository::delete);
   }
 
   @PutMapping(value = "{quoteId}/sources/{sourceId}", produces = MediaType.APPLICATION_JSON_VALUE)
