@@ -3,11 +3,13 @@ package edu.cnm.deepdive.qod.model.entity;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import edu.cnm.deepdive.qod.view.FlatQuote;
 import edu.cnm.deepdive.qod.view.FlatSource;
+import java.net.URI;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,8 +25,13 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
+@SuppressWarnings("JpaDataSourceORMInspection")
+@Component
 @Entity
 @Table(
     indexes = {
@@ -32,6 +39,9 @@ import org.springframework.lang.NonNull;
     }
 )
 public class Source implements FlatSource {
+
+  private static EntityLinks entityLinks;
+
 
   @NonNull
   @Id
@@ -93,6 +103,11 @@ public class Source implements FlatSource {
   }
 
   @Override
+  public URI getHref() {
+    return entityLinks.linkForItemResource(Source.class, id).toUri();
+  }
+
+  @Override
   public int hashCode() {
     return Objects.hash(id, name); // TODO Compute lazily & cache.
   }
@@ -109,4 +124,13 @@ public class Source implements FlatSource {
     return result;
   }
 
+  @PostConstruct
+  private void init() {
+    entityLinks.toString();
+  }
+
+  @Autowired
+  private void setEntityLinks(EntityLinks entityLinks) {
+    Source.entityLinks = entityLinks;
+  }
 }
