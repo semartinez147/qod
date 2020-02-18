@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>Random Quote</title>
+  </head>
+  <body>
+  <blockquote>&ldquo;<span th:text="${quote.getText()}">Oops I broke this blockquote.</span>&rdquo;</blockquote>
+
+  <p style="text-emphasis: antiquewhite;">-
+    <span th:text="${(quote.getSource() != null) ? quote.getSource().getName() : 'Unknown'}">Oops I broke this paragraph.</span>
+  </p>
+  </body>
+</html>
